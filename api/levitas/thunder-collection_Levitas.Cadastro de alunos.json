@@ -1,0 +1,28 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Levitas.Cadastro de alunos",
+    "dateExported": "2023-05-20T17:38:46.625Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "6d6a3e5a-fd55-487b-9ccb-d55b0c9ec9b1",
+            "colId": "560ce300-06c4-4d02-8489-5ea433ddabb0",
+            "containerId": "",
+            "name": "Criar novo aluno",
+            "url": "http://localhost:7071/api/alunos",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-05-19T02:19:07.976Z",
+            "modified": "2023-05-19T02:21:41.058Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"nome\": \"Luca Silverio\",\n  \"dataDeNascimento\": \"1990-03-07\",\n  \"nomeDoResponsavel\": \"Não se aplica\",\n  \"temSkate\": true\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}
