@@ -1,0 +1,32 @@
+<po-page-default>
+  <div class="po-row">
+    <po-widget
+      class="po-sm-12 po-md-8 po-lg-6"
+      [p-height]="250"
+      p-title="Perfil do aluno"
+      p-primary-label="Upload foto"
+      p-secondary-label="Upload autorização dos pais"
+      (p-primary-action)="uploadFoto()"
+      (p-secondary-action)="uploadAutorizacao()"
+    >
+      <po-avatar
+        class="po-md-4"
+        p-size="lg"
+        [p-src]="avatar"
+        (p-click)="modal.open()"
+      >
+      </po-avatar>
+
+      <div class="po-md-8">
+        <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+        <p><strong>Phone:</strong> {{ aluno.telefone }}</p>
+        <p><strong>Nome do responsável:</strong> {{ aluno.nomeDoResponsavel }}</p>
+      </div>
+    </po-widget>
+  </div>
+
+  <po-modal #modal p-title="Profile Image">
+    <img [src]="aluno.urlFoto" class="sample-center-image" alt="" srcset="" />
+    <po-upload name="upload" p-label="PO Upload" p-url="https://po-sample-api.fly.dev/v1/uploads/addFile"> </po-upload>
+  </po-modal>
+</po-page-default>
