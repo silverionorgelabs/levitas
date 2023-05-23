@@ -30,7 +30,7 @@
   </div>
 
   <po-modal #modal p-title="Profile Image">
-    <img [src]="aluno.urlFoto" class="sample-center-image" alt="" srcset="" />
+    <img [src]="aluno.urlFoto" class="sample-center-image" alt="" srcset="" height="250" />
     <po-upload
       name="upload"
       p-label="Selecionar foto"
@@ -46,6 +46,7 @@
       [src]="aluno.urlTermoDeResponsabilidadeAssinado"
       class="sample-center-image"
       alt=""
+      height="250"
       srcset=""
     />
     <po-upload
