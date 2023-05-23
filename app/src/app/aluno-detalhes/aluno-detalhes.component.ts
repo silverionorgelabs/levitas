@@ -1,15 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import {
-  PoBreadcrumb,
-  PoModalAction,
-  PoModalComponent,
-  PoNotificationService,
-  PoPageAction,
-  PoTableColumn,
-} from '@po-ui/ng-components';
 import { AlunosService } from '../alunos.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
+import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-aluno-detalhes',
@@ -17,11 +11,9 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
   styleUrls: ['./aluno-detalhes.component.css'],
 })
 export class AlunoDetalhesComponent {
-  avatar = 'http://lorempixel.com/300/300/cats/';
-
-  /**
-   *
-   */
+  breadcrumbs: PoBreadcrumb = {
+    items: [ { label: 'Alunos', link: '../../' }, { label: 'Detalhes' }],
+  }
   private id: string = '';
   constructor(private alunos: AlunosService, activatedRoute: ActivatedRoute) {
     activatedRoute.params.subscribe((params) => {
@@ -34,15 +26,20 @@ export class AlunoDetalhesComponent {
 
   aluno: any = {};
 
-  uploadFoto() {
-    window.open(`tel:`, '_self');
+  uploadAluno(event: any) {}
+
+  atualizarAluno(event: HttpResponse<any>) {
+    this.aluno.urlFoto = event.body.fileName;
   }
 
   uploadAutorizacao() {
     window.open(`mailto:`, '_self');
   }
 
-  formatPhoneNumber(phone:string) {
-    return `(${phone.substring(0, 2)}) ${phone.substring(2, 7)}-${phone.substring(7)}`;
+  formatPhoneNumber(phone: string) {
+    return `(${phone.substring(0, 2)}) ${phone.substring(
+      2,
+      7
+    )}-${phone.substring(7)}`;
   }
 }

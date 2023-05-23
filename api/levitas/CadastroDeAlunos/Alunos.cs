@@ -11,12 +11,14 @@ using Microsoft.Azure.Documents.Client;
 using levitas.PoContract;
 using System.Linq;
 using Microsoft.Azure.Documents;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
 
 namespace levitas.CadastroDeAlunos;
 public static class Alunos
 {
     private const string databaseName = "Levitas";
-    private const string containerName = "Alunos";
+    private const string containerCosmosName = "Alunos";
     private const string cosmosdbConnection = "CosmosDBConnection";
     //TODO: Implementar mascara de dados nos metadados
     [FunctionName("MetaData")]
@@ -42,7 +44,7 @@ public static class Alunos
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/alunos")] HttpRequest req,
          [CosmosDB(
                 databaseName: databaseName,
-                collectionName: containerName,
+                collectionName: containerCosmosName,
                 ConnectionStringSetting = cosmosdbConnection)] IAsyncCollector<Aluno> alunos,
         ILogger log)
     {
@@ -71,7 +73,7 @@ public static class Alunos
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/alunos/{id}")] HttpRequest req,
         [CosmosDB(
                 databaseName: databaseName,
-                collectionName: containerName,
+                collectionName: containerCosmosName,
                 ConnectionStringSetting = cosmosdbConnection,
                 Id = "{id}",
                 PartitionKey ="{id}")]  Aluno aluno,
@@ -92,7 +94,7 @@ public static class Alunos
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/alunos")] HttpRequest req,
         [CosmosDB(
             databaseName: databaseName,
-            collectionName: containerName,
+            collectionName: containerCosmosName,
             ConnectionStringSetting = cosmosdbConnection)] DocumentClient client,
         ILogger log)
     {
@@ -107,7 +109,7 @@ public static class Alunos
 
 
         var query = client.CreateDocumentQuery<Aluno>(
-            UriFactory.CreateDocumentCollectionUri(databaseName, containerName),
+            UriFactory.CreateDocumentCollectionUri(databaseName, containerCosmosName),
             new FeedOptions { EnableCrossPartitionQuery = true })
             .AsQueryable();
 
@@ -139,14 +141,14 @@ public static class Alunos
            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/alunos/{id}")] HttpRequest req,
            [CosmosDB(
             databaseName: databaseName,
-            collectionName: containerName,
+            collectionName: containerCosmosName,
             ConnectionStringSetting = cosmosdbConnection)] DocumentClient client,
            ILogger log,
            string id)
     {
         log.LogInformation("Deletar Aluno solicitado: {0}", id);
 
-        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerName, id);
+        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerCosmosName, id);
         if (documentUri is null)
             return new NotFoundResult();
 
@@ -160,7 +162,7 @@ public static class Alunos
        [HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/alunos/{id}")] HttpRequest req,
          [CosmosDB(
             databaseName: databaseName,
-            collectionName: containerName,
+            collectionName: containerCosmosName,
             ConnectionStringSetting = cosmosdbConnection)] DocumentClient client,
        ILogger log,
 
@@ -168,7 +170,7 @@ public static class Alunos
     {
         log.LogInformation("AtualizarAluno: {0}", id);
 
-        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerName, id);
+        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerCosmosName, id);
         var alunoString = await req.ReadAsStringAsync();
         var aluno = JsonConvert.DeserializeObject<Aluno>(alunoString);
 
@@ -177,31 +179,98 @@ public static class Alunos
         return new NoContentResult();
     }
 
-    [FunctionName("UploadFoto")]
+    [FunctionName("UploadImage")]
     public static async Task<IActionResult> UploadFotoDoAluno(
-      [HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/alunos/{id}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/alunos/{id}")] HttpRequest req,
         [CosmosDB(
             databaseName: databaseName,
-            collectionName: containerName,
+            collectionName: containerCosmosName,
             ConnectionStringSetting = cosmosdbConnection)] DocumentClient client,
-       [Blob("foto-perfil-aluno/{id}", FileAccess.Read, Connection = "AzureWebJobsStorage")] Stream myBlob,
-      ILogger log,
-      string id)
+        string id,
+        ILogger log)
     {
-        log.LogInformation("AtualizarAluno: {0}", id);
+        log.LogInformation("UploadImage solicitado: {0}", id);
 
-        var file = req.Form.Files[0];
-        await file.CopyToAsync(myBlob);
+        var imageFile = req.Form.Files["files"];
+        var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+        var containerBlobName = "foto-perfil-aluno";
 
-        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerName, id);
-        var alunoString = await req.ReadAsStringAsync();
-        var aluno = JsonConvert.DeserializeObject<Aluno>(alunoString);
+        var storageAccount = CloudStorageAccount.Parse(connectionString);
+        var blobClient = storageAccount.CreateCloudBlobClient();
+        var container = blobClient.GetContainerReference(containerBlobName);
 
-        aluno.UrlFoto = id;
+        await container.CreateIfNotExistsAsync();
 
-        await client.ReplaceDocumentAsync(documentUri, aluno);
+        var blobName = id + Path.GetExtension(imageFile.FileName);
+        var blob = container.GetBlockBlobReference(blobName);
 
-        return new NoContentResult();
+        using (var stream = imageFile.OpenReadStream())
+            await blob.UploadFromStreamAsync(stream);
+
+        var response = new PoUploadResponse()
+        {
+            FileName = blob.Uri.ToString(),
+            uniqueId = id,
+            uploadedDate = DateTime.Now,
+            PoUploadStatus = PoUploadStatus.Done
+        };
+
+        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerCosmosName, id);
+
+        log.LogInformation("Uri do aluno: {0}", documentUri);
+
+        var documentoAluno = await client.ReadDocumentAsync<Aluno>(documentUri, new RequestOptions { PartitionKey = new PartitionKey(id) });
+
+        documentoAluno.Document.UrlFoto = response.FileName;
+        await client.ReplaceDocumentAsync(documentUri, documentoAluno.Document);
+
+        return new OkObjectResult(response);
     }
+    [FunctionName("UploadTermoDeResponsabilidade")]
+    public static async Task<IActionResult> UploadTermoDeResponsabilidade(
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/alunos/{id}/termo-de-responsabilidade")] HttpRequest req,
+           [CosmosDB(
+            databaseName: databaseName,
+            collectionName: containerCosmosName,
+            ConnectionStringSetting = cosmosdbConnection)] DocumentClient client,
+           string id,
+           ILogger log)
+    {
+        log.LogInformation("Upload termo de responsabilidade solicitado: {0}", id);
 
+        var imageFile = req.Form.Files["files"];
+        var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+        var containerBlobName = "autorizacao-dos-pais";
+
+        var storageAccount = CloudStorageAccount.Parse(connectionString);
+        var blobClient = storageAccount.CreateCloudBlobClient();
+        var container = blobClient.GetContainerReference(containerBlobName);
+
+        await container.CreateIfNotExistsAsync();
+
+        var blobName = id + Path.GetExtension(imageFile.FileName);
+        var blob = container.GetBlockBlobReference(blobName);
+
+        using (var stream = imageFile.OpenReadStream())
+            await blob.UploadFromStreamAsync(stream);
+
+        var response = new PoUploadResponse()
+        {
+            FileName = blob.Uri.ToString(),
+            uniqueId = id,
+            uploadedDate = DateTime.Now,
+            PoUploadStatus = PoUploadStatus.Done
+        };
+
+        Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerCosmosName, id);
+
+        log.LogInformation("Uri do aluno: {0}", documentUri);
+
+        var documentoAluno = await client.ReadDocumentAsync<Aluno>(documentUri, new RequestOptions { PartitionKey = new PartitionKey(id) });
+
+        documentoAluno.Document.UrlTermoDeResponsabilidadeAssinado = response.FileName;
+        await client.ReplaceDocumentAsync(documentUri, documentoAluno.Document);
+
+        return new OkObjectResult(response);
+    }
 }
