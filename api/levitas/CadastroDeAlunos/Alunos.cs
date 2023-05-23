@@ -13,6 +13,7 @@ using System.Linq;
 using Microsoft.Azure.Documents;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage;
+using System.Collections.Generic;
 
 namespace levitas.CadastroDeAlunos;
 public static class Alunos
@@ -143,6 +144,12 @@ public static class Alunos
             databaseName: databaseName,
             collectionName: containerCosmosName,
             ConnectionStringSetting = cosmosdbConnection)] DocumentClient client,
+              [CosmosDB(
+                databaseName: databaseName,
+                collectionName: containerCosmosName,
+                ConnectionStringSetting = cosmosdbConnection,
+                Id = "{id}",
+                PartitionKey ="{id}")]  Aluno aluno,
            ILogger log,
            string id)
     {
@@ -153,6 +160,21 @@ public static class Alunos
             return new NotFoundResult();
 
         await client.DeleteDocumentAsync(documentUri, new RequestOptions { PartitionKey = new PartitionKey(id) });
+
+
+        var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+        var storageAccount = CloudStorageAccount.Parse(connectionString);
+        var blobClient = storageAccount.CreateCloudBlobClient();
+
+        var containerNameAutorizacaoDosPais = "autorizacao-dos-pais";
+        var containerAutorizacaoDosPais = blobClient.GetContainerReference(containerNameAutorizacaoDosPais);
+        var blobAutorizacaoDosPais = containerAutorizacaoDosPais.GetBlockBlobReference(Path.GetFileName(aluno.UrlTermoDeResponsabilidadeAssinado));
+        await blobAutorizacaoDosPais.DeleteIfExistsAsync();
+
+        var containerNameFotoPerfilAluno = "foto-perfil-aluno";
+        var containerFotoPerfilAluno = blobClient.GetContainerReference(containerNameFotoPerfilAluno);
+        var blobFotoPerfilAluno = containerFotoPerfilAluno.GetBlockBlobReference(Path.GetFileName(aluno.UrlFoto));
+        await blobFotoPerfilAluno.DeleteIfExistsAsync();
 
         return new NoContentResult();
     }
@@ -273,4 +295,7 @@ public static class Alunos
 
         return new OkObjectResult(response);
     }
+
+
+
 }
