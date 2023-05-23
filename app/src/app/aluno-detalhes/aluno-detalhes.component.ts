@@ -20,16 +20,21 @@ export class AlunoDetalhesComponent {
       this.id = params['id'];
       this.alunos.getAluno(this.id).subscribe((aluno) => {
         this.aluno = aluno;
+      
       });
     });
   }
 
   aluno: any = {};
 
-  uploadAluno(event: any) {}
+  upload(event: any) {}
 
   atualizarAluno(event: HttpResponse<any>) {
     this.aluno.urlFoto = event.body.fileName;
+  }
+
+  atualizarAutorizacao(event: HttpResponse<any>) {  
+    this.aluno.urlTermoDeResponsabilidadeAssinado = event.body.fileName;
   }
 
   uploadAutorizacao() {

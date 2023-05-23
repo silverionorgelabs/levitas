@@ -36,7 +36,7 @@
       p-label="Selecionar foto"
       [p-restrictions]="{ allowedExtensions: ['.jpg', '.png'] }"
       [p-url]="'http://localhost:7071/api/v1/alunos/' + aluno.id"
-      (p-upload)="uploadAluno($event)"
+      (p-upload)="upload($event)"
       (p-success)="atualizarAluno($event)"
     >
     </po-upload>
@@ -57,7 +57,8 @@
         aluno.id +
         '/termo-de-responsabilidade'
       "
-      (p-upload)="uploadAluno($event)"
+      (p-upload)="upload($event)"
+      (p-success)="atualizarAutorizacao($event)"
     >
     </po-upload>
   </po-modal>
