@@ -87,7 +87,7 @@ public static class Alunos
         return new OkObjectResult(aluno);
     }
 
-    //TODO: Implementar paginação e método search, implentar filtros, refatorar
+
     [FunctionName("ObterAlunos")]
     public static IActionResult ObterAlunosAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/alunos")] HttpRequest req,

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using levitas.PoContract;
 
 namespace levitas.CadastroDeAlunos;
-public class AlunoLoadMetaData : PoDynamicEditMetaData
+public class AlunoLoadMetaData : PoDynamicMetaData
 {
     public AlunoLoadMetaData()
     {

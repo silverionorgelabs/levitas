@@ -3,7 +3,7 @@ using levitas.PoContract;
 
 namespace levitas.CadastroDeAlunos
 {
-    public class AlunoMetaData : PoDynamicEditMetaData
+    public class AlunoMetaData : PoDynamicMetaData
     {
         
         public AlunoMetaData()
@@ -55,7 +55,8 @@ namespace levitas.CadastroDeAlunos
                 {
                     Property = "temSkate",
                     Label = "Tem Skate",
-                    Type = PoDynamicFieldType.boolean
+                    Type = PoDynamicFieldType.boolean,
+                    
                 },
                 new PoDynamicField()
                 {
