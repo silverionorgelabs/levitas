@@ -20,7 +20,16 @@ public class Aluno
     public bool TemSkate { get; set; }
     public string UrlFoto { get; set; }
     public string UrlTermoDeResponsabilidadeAssinado { get; set; }
-    
-   
+
+    public static Aluno Create(dynamic data)
+    => new Aluno
+    {
+        Id = Guid.NewGuid().ToString(),
+        Nome = data?.nome,
+        DataDeNascimento = data?.dataDeNascimento,
+        NomeDoResponsavel = data?.nomeDoResponsavel,
+        Telefone = data?.telefone,
+        TemSkate = data?.temSkate?.Value ?? false
+    };
 
 }

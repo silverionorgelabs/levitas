@@ -13,5 +13,13 @@ namespace levitas.PoContract
         public string error { get; set; } 
         public PoUploadStatus PoUploadStatus { get; set; }
 
+        public static PoUploadResponse Success(string fileName, string uniqueId)
+        => new PoUploadResponse(){
+            FileName = fileName,
+            uniqueId = uniqueId,
+            PoUploadStatus = PoUploadStatus.Done,
+            uploadedDate = DateTime.Now
+        };
+
     }
 }
