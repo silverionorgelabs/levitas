@@ -60,7 +60,7 @@ public static class Alunos
             DataDeNascimento = data?.dataDeNascimento,
             NomeDoResponsavel = data?.nomeDoResponsavel,
             Telefone = data?.telefone,
-            TemSkate = data?.temSkate
+            TemSkate = data?.temSkate?.Value ?? false
         };
         await alunos.AddAsync(aluno);
 
