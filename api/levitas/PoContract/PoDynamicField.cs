@@ -21,4 +21,7 @@ public class PoDynamicField
     public string Alt { get; set; }
     public int Height { get; set; }
     public bool Filter { get; set; }
+    public string Mask { get; set; }
+    public bool Required {get; set;}
+    public string Help { get; set; }
 }

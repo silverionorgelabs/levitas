@@ -28,7 +28,8 @@ public class AlunoLoadMetaData : PoDynamicMetaData
                     Label = "Nome",
                     GridColumns= 6,
                     Filter = true,
-                    Type = PoDynamicFieldType.text
+                    Type = PoDynamicFieldType.text,
+                    Required = true
                 },
                 new PoDynamicField()
                 {
@@ -47,7 +48,8 @@ public class AlunoLoadMetaData : PoDynamicMetaData
                 {
                     Property = "telefone",
                     Label = "Telefone",
-                    Type = PoDynamicFieldType.text
+                    Type = PoDynamicFieldType.text,
+                     Mask = "(99)9 9999-9999"
                 },
                 new PoDynamicField()
                 {
@@ -55,7 +57,9 @@ public class AlunoLoadMetaData : PoDynamicMetaData
                     Label = "Nome do Responsável",
                     GridColumns= 6,
                     Type = PoDynamicFieldType.text,
-                    Filter = true
+                    Filter = true,
+                    Required = true,
+                    Help = "Nome do responsável pelo aluno"
                 },
                 new PoDynamicField()
                 {

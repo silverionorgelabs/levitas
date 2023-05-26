@@ -24,7 +24,8 @@ namespace levitas.CadastroDeAlunos
                     Property = "nome",
                     Label = "Nome",
                     Type = PoDynamicFieldType.text,
-                    Filter = true
+                    Filter = true,
+                    Required = true
                 },
                 new PoDynamicField()
                 {
@@ -42,14 +43,17 @@ namespace levitas.CadastroDeAlunos
                 {
                     Property = "telefone",
                     Label = "Telefone",
-                    Type = PoDynamicFieldType.text
+                    Type = PoDynamicFieldType.text,
+                    Mask = "(99)9 9999-9999"
                 },
                 new PoDynamicField()
                 {
                     Property = "nomeDoResponsavel",
                     Label = "Nome do Responsável",
                     Type = PoDynamicFieldType.text,
-                    Filter = true
+                    Filter = true,
+                    Required = true,
+                    Help = "Nome do responsável pelo aluno"
                 },
                 new PoDynamicField()
                 {
