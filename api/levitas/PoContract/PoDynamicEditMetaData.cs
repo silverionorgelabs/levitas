@@ -7,4 +7,5 @@ public class PoDynamicEditMetaData
     public string Title { get; set; }
      public List<PoDynamicField> Fields { get; set; } = new List<PoDynamicField>();
      public List<PoDynamicAction> Actions { get; set; } = new List<PoDynamicAction>();
+     public bool KeepFilters { get; set; }  = true;
 }

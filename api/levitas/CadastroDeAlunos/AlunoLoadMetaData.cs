@@ -27,6 +27,7 @@ public class AlunoLoadMetaData : PoDynamicEditMetaData
                     Property = "nome",
                     Label = "Nome",
                     GridColumns= 6,
+                    Filter = true,
                     Type = PoDynamicFieldType.text
                 },
                 new PoDynamicField()
@@ -53,7 +54,8 @@ public class AlunoLoadMetaData : PoDynamicEditMetaData
                     Property = "nomeDoResponsavel",
                     Label = "Nome do Responsável",
                     GridColumns= 6,
-                    Type = PoDynamicFieldType.text
+                    Type = PoDynamicFieldType.text,
+                    Filter = true
                 },
                 new PoDynamicField()
                 {

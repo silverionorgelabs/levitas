@@ -7,6 +7,7 @@ import {
   PoPageDynamicTableComponent,
 } from '@po-ui/ng-templates';
 import { AlunoDetalhesComponent } from './aluno-detalhes/aluno-detalhes.component';
+
 const routeserviceConfig = {
   serviceApi: 'http://localhost:7071/api/v1/alunos', // endpoint dos dados
   serviceMetadataApi: 'http://localhost:7071/api/v1/alunos/metadata', // endpoint dos metadados utilizando o método HTTP Get

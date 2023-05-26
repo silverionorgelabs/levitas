@@ -14,10 +14,11 @@ import { FormsModule } from '@angular/forms';
 import { PoUploadService } from '@po-ui/ng-components/lib/components/po-field/po-upload/po-upload.service';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
-    AlunoDetalhesComponent
+    AlunoDetalhesComponent,
   ],
   imports: [
     BrowserModule,

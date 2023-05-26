@@ -11,9 +11,7 @@ using Microsoft.Azure.Documents.Client;
 using levitas.PoContract;
 using System.Linq;
 using Microsoft.Azure.Documents;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage;
-using System.Collections.Generic;
 
 namespace levitas.CadastroDeAlunos;
 public static class Alunos
@@ -105,7 +103,10 @@ public static class Alunos
         {
             page = req.Query.ContainsKey("page") ? int.Parse(req.Query["page"]) : 1,
             pageSize = req.Query.ContainsKey("pageSize") ? int.Parse(req.Query["pageSize"]) : 10,
-            order = req.Query.ContainsKey("order") ? req.Query["order"].ToString() : string.Empty
+            order = req.Query.ContainsKey("order") ? req.Query["order"].ToString() : string.Empty,
+            search = req.Query.ContainsKey("search") ? req.Query["search"].ToString() : string.Empty,
+            nome = req.Query.ContainsKey("nome") ? req.Query["nome"].ToString() : string.Empty,
+            nomeDoResponsavel = req.Query.ContainsKey("nomeDoResponsavel") ? req.Query["nomeDoResponsavel"].ToString() : string.Empty
         };
 
 
@@ -113,6 +114,26 @@ public static class Alunos
             UriFactory.CreateDocumentCollectionUri(databaseName, containerCosmosName),
             new FeedOptions { EnableCrossPartitionQuery = true })
             .AsQueryable();
+
+        if (!string.IsNullOrEmpty(poLookup.search))
+        {
+            log.LogInformation("ObterAlunos search: {0}", poLookup.search);
+            query = query.Where(x => x.Nome.ToLower().Contains(poLookup.search.ToLower()));
+        }
+
+        
+        if (!string.IsNullOrEmpty(poLookup.nome))
+        {
+            log.LogInformation("ObterAlunos name: {0}", poLookup.nome);
+            query = query.Where(x => x.Nome.ToLower().Contains(poLookup.nome.ToLower()));
+        }
+
+        
+        if (!string.IsNullOrEmpty(poLookup.nomeDoResponsavel))
+        {
+            log.LogInformation("ObterAlunos nome responsavel: {0}", poLookup.nomeDoResponsavel);
+            query = query.Where(x => x.NomeDoResponsavel.ToLower().Contains(poLookup.nomeDoResponsavel.ToLower()));
+        }
 
         if (!string.IsNullOrEmpty(poLookup.order))
         {

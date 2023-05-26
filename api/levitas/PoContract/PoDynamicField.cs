@@ -20,4 +20,5 @@ public class PoDynamicField
     public bool Image { get; set; }
     public string Alt { get; set; }
     public int Height { get; set; }
+    public bool Filter { get; set; }
 }

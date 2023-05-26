@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { AlunosService } from '../alunos.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { PoBreadcrumb, PoBreadcrumbItem } from '@po-ui/ng-components';
+import { PoBreadcrumb, PoBreadcrumbItem, } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-aluno-detalhes',
