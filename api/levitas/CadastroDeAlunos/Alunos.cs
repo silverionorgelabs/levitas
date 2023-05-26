@@ -11,8 +11,6 @@ using Microsoft.Azure.Documents.Client;
 using levitas.PoContract;
 using System.Linq;
 using Microsoft.Azure.Documents;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using levitas.CadastroDeAlunos.Infra;
 
 namespace levitas.CadastroDeAlunos;
@@ -74,7 +72,7 @@ public static partial class Alunos
     {
         log.LogInformation("ObterAlunos solicitado");
 
-        var poLookup = PoLookup.Create(req);
+        var poLookup = AlunoLookup.Create(req);
         var query = client.CreateDocumentQuery<Aluno>(
             UriFactory.CreateDocumentCollectionUri(databaseName, containerCosmosName),
             new FeedOptions { EnableCrossPartitionQuery = true })

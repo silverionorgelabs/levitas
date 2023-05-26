@@ -1,8 +1,6 @@
 using System;
-using System.Runtime.Serialization;
 using levitas.PoContract;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace levitas.CadastroDeAlunos;
 [Serializable]
