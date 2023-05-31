@@ -25,7 +25,8 @@ public class AlunoLoadMetaData : PoDynamicMetaData
                     GridColumns= 6,
                     Filter = true,
                     Type = PoDynamicFieldType.text,
-                    Required = true
+                    Required = true,
+                    MinLength = 3,
                 },
                 new PoDynamicField()
                 {

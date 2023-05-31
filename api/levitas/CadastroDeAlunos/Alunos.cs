@@ -36,6 +36,19 @@ public static partial class Alunos
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         dynamic data = JsonConvert.DeserializeObject(requestBody);
         Aluno aluno = Aluno.Create(data);
+        if (string.IsNullOrEmpty(aluno.Nome) || aluno.Nome.Length < 3)
+            return new BadRequestObjectResult(new PoMessage()
+            {
+                Code = "NomeInvalido",
+                Message = "Nome do aluno é obrigatório e deve ter no mínimo 3 caracteres"
+            });
+
+        if (string.IsNullOrEmpty(aluno.NomeDoResponsavel) || aluno.NomeDoResponsavel.Length < 3)
+            return new BadRequestObjectResult(new PoMessage()
+            {
+                Code = "NomeDoResponsavelInvalido",
+                Message = "Nome do responsável é obrigatório e deve ter no mínimo 3 caracteres"
+            });
 
         await alunos.AddAsync(aluno);
 
@@ -198,7 +211,7 @@ public static partial class Alunos
 
         var uri = await storage.Upload(containerNameFotoPerfilAluno, imageFile.FileName, imageFile);
 
-        var response = PoUploadResponse.Success(uri,id);
+        var response = PoUploadResponse.Success(uri, id);
 
         Uri documentUri = UriFactory.CreateDocumentUri(databaseName, containerCosmosName, id);
 

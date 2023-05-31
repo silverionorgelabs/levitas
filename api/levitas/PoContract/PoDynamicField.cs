@@ -24,4 +24,5 @@ public class PoDynamicField
     public string Mask { get; set; }
     public bool Required {get; set;}
     public string Help { get; set; }
+    public int MinLength { get; set; }
 }

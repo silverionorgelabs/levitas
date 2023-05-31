@@ -25,7 +25,8 @@ namespace levitas.CadastroDeAlunos
                     Label = "Nome",
                     Type = PoDynamicFieldType.text,
                     Filter = true,
-                    Required = true
+                    Required = true,
+                    MinLength = 3,
                 },
                 new PoDynamicField()
                 {
