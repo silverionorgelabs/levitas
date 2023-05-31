@@ -24,7 +24,7 @@ public static partial class Alunos
 
     [FunctionName("CriarNovoAluno")]
     public static async Task<IActionResult> CriarNovoAluno(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/alunos")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v1/alunos")] HttpRequest req,
          [CosmosDB(
                 databaseName: databaseName,
                 collectionName: containerCosmosName,
@@ -44,7 +44,7 @@ public static partial class Alunos
 
     [FunctionName("ObterAluno")]
     public static IActionResult ObterAluno(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/alunos/{id}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v1/alunos/{id}")] HttpRequest req,
         [CosmosDB(
                 databaseName: databaseName,
                 collectionName: containerCosmosName,
@@ -63,7 +63,7 @@ public static partial class Alunos
 
     [FunctionName("ObterAlunos")]
     public static IActionResult ObterAlunosAsync(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "v1/alunos")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "v1/alunos")] HttpRequest req,
         [CosmosDB(
             databaseName: databaseName,
             collectionName: containerCosmosName,
@@ -87,7 +87,7 @@ public static partial class Alunos
 
     [FunctionName("DeletarAluno")]
     public static async Task<IActionResult> DeletarAluno(
-           [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "v1/alunos/{id}")] HttpRequest req,
+           [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "v1/alunos/{id}")] HttpRequest req,
            [CosmosDB(
             databaseName: databaseName,
             collectionName: containerCosmosName,
@@ -129,7 +129,7 @@ public static partial class Alunos
 
     [FunctionName("AtualizarAluno")]
     public static async Task<IActionResult> AtualizarAluno(
-       [HttpTrigger(AuthorizationLevel.Function, "put", Route = "v1/alunos/{id}")] HttpRequest req,
+       [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "v1/alunos/{id}")] HttpRequest req,
          [CosmosDB(
             databaseName: databaseName,
             collectionName: containerCosmosName,
@@ -151,7 +151,7 @@ public static partial class Alunos
 
     [FunctionName("Upload-Foto-Aluno")]
     public static async Task<IActionResult> UploadFotoDoAluno(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/alunos/{id}")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v1/alunos/{id}")] HttpRequest req,
         [CosmosDB(
             databaseName: databaseName,
             collectionName: containerCosmosName,
@@ -182,7 +182,7 @@ public static partial class Alunos
     }
     [FunctionName("UploadTermoDeResponsabilidade")]
     public static async Task<IActionResult> UploadTermoDeResponsabilidade(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = "v1/alunos/{id}/termo-de-responsabilidade")] HttpRequest req,
+           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "v1/alunos/{id}/termo-de-responsabilidade")] HttpRequest req,
            [CosmosDB(
             databaseName: databaseName,
             collectionName: containerCosmosName,

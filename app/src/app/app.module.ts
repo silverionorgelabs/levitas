@@ -11,7 +11,6 @@ import { PoPageDynamicEditModule } from '@po-ui/ng-templates';
 import { AlunosInterceptorService } from './alunos-interceptor.service';
 import { AlunoDetalhesComponent } from './aluno-detalhes/aluno-detalhes.component';
 import { FormsModule } from '@angular/forms';
-import { PoUploadService } from '@po-ui/ng-components/lib/components/po-field/po-upload/po-upload.service';
 
 
 
