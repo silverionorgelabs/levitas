@@ -1,0 +1,66 @@
+<po-page-default [p-breadcrumb]="breadcrumbs">
+  <div class="po-row">
+    <po-widget
+      class="po-sm-12 po-md-8 po-lg-6"
+      [p-height]="250"
+      p-title="Perfil do aluno"
+      p-primary-label="Termo de responsabilidade dos pais"
+      (p-primary-action)="autorizacaoDosPais.open()"
+    >
+      <po-avatar
+        class="po-md-4"
+        p-size="lg"
+        [p-src]="aluno.urlFoto"
+        (p-click)="modal.open()"
+      >
+      </po-avatar>
+
+      <div class="po-md-8">
+        <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+        <p><strong>Data de nascimento:</strong> {{ aluno.dataDeNascimento }}</p>
+        <p><strong>Telefone:</strong> {{ aluno.telefone }}</p>
+        <p>
+          <strong>Nome do responsável:</strong> {{ aluno.nomeDoResponsavel }}
+        </p>
+        <p>
+          <strong>Idade:</strong> {{ aluno.idade }}
+        </p>
+      </div>
+    </po-widget>
+  </div>
+
+  <po-modal #modal p-title="Profile Image">
+    <img [src]="aluno.urlFoto" class="sample-center-image" alt="" srcset="" height="250" />
+    <po-upload
+      name="upload"
+      p-label="Selecionar foto"
+      [p-restrictions]="{ allowedExtensions: ['.jpg', '.png'] }"
+      [p-url]="'http://localhost:7071/api/v1/alunos/' + aluno.id"
+      (p-upload)="upload($event)"
+      (p-success)="atualizarAluno($event)"
+    >
+    </po-upload>
+  </po-modal>
+  <po-modal #autorizacaoDosPais p-title="Autorização dos pais">
+    <img
+      [src]="aluno.urlTermoDeResponsabilidadeAssinado"
+      class="sample-center-image"
+      alt=""
+      height="250"
+      srcset=""
+    />
+    <po-upload
+      name="upload"
+      p-label="Selecionar arquivo"
+      [p-restrictions]="{ allowedExtensions: ['.jpg', '.png'] }"
+      [p-url]="
+        'http://localhost:7071/api/v1/alunos/' +
+        aluno.id +
+        '/termo-de-responsabilidade'
+      "
+      (p-upload)="upload($event)"
+      (p-success)="atualizarAutorizacao($event)"
+    >
+    </po-upload>
+  </po-modal>
+</po-page-default>
