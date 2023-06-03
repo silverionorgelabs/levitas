@@ -29,7 +29,7 @@ import { FormsModule } from '@angular/forms';
     PoTableModule,
     FormsModule,
     
-    RouterModule.forRoot([]),
+    RouterModule,
     PoTemplatesModule,
     RouterModule
   ],
