@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { PoMenuItem } from '@po-ui/ng-components';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
     
   }
   ngOnInit(): void {
-   this.http.get('http://localhost:7071/api/v1/alunos/load-metadata').subscribe((data) => {
+   this.http.get(`${environment.API_URL}/load-metadata`).subscribe((data) => {
     this.data = data;
    });
   }
