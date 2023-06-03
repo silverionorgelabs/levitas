@@ -4,6 +4,7 @@ import { AlunosService } from '../alunos.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { PoBreadcrumb, PoBreadcrumbItem, } from '@po-ui/ng-components';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-aluno-detalhes',
@@ -11,6 +12,7 @@ import { PoBreadcrumb, PoBreadcrumbItem, } from '@po-ui/ng-components';
   styleUrls: ['./aluno-detalhes.component.css'],
 })
 export class AlunoDetalhesComponent {
+  url:string= environment.API_URL;
   breadcrumbs: PoBreadcrumb = {
     items: [ { label: 'Alunos', link: '../../' }, { label: 'Detalhes' }],
   }
